@@ -1,1 +1,936 @@
 
+import React, { useState, useEffect, useRef } from 'react';
+import { 
+  Terminal, Cpu, Code, Layers, Server, Globe, Sparkles, Send, Download, 
+  ExternalLink, ChevronRight, CheckCircle, Mail, Phone, MapPin, Award, 
+  Briefcase, GraduationCap, Monitor, Database, ShieldCheck, Zap, Activity,
+  Filter, Play, RefreshCw, X, MessageSquare, ArrowUpRight, Check, User
+} from 'lucide-react';
+
+export default function App() {
+  const [activeTab, setActiveTab] = useState('all');
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [contactModal, setContactModal] = useState(false);
+  const [terminalInput, setTerminalInput] = useState('');
+  const [terminalLogs, setTerminalLogs] = useState([
+    { type: 'system', text: 'AURA AI OS v2.4 initialized...' },
+    { type: 'system', text: 'Connected to Nainpal core network [Delhi Sector 15 Node]' },
+    { type: 'prompt', text: 'Type "help" or select a preset workflow command below to test live AI automation.' }
+  ]);
+  const [isExecuting, setIsExecuting] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  const terminalEndRef = useRef(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [terminalLogs]);
+
+  // Terminal Automation Presets
+  const runAutomation = (commandText) => {
+    if (isExecuting) return;
+    setIsExecuting(true);
+    
+    const newLogs = [...terminalLogs, { type: 'user', text: commandText }];
+    setTerminalLogs(newLogs);
+
+    let responses = [];
+    const lowerCmd = commandText.toLowerCase().trim();
+
+    if (lowerCmd.includes('opd') || lowerCmd.includes('hospital')) {
+      responses = [
+        { type: 'info', text: '⚡ Connecting to Doctors OPD LED Management System API...' },
+        { type: 'info', text: '🔄 Syncing real-time sheet backend with hospital screen display...' },
+        { type: 'success', text: '✅ OPD LED Screens synchronized with auto-refresh active [0.04s]' }
+      ];
+    } else if (lowerCmd.includes('aura') || lowerCmd.includes('agent')) {
+      responses = [
+        { type: 'info', text: '🤖 Deploying AURA AI Virtual Employee Engine...' },
+        { type: 'info', text: '🌍 Initializing Multilingual NLU Engine (Arabic / English / French)...' },
+        { type: 'success', text: '🚀 AURA AI OS ready: Handling visitor onboarding & lead qualification automatically.' }
+      ];
+    } else if (lowerCmd.includes('event') || lowerCmd.includes('qna')) {
+      responses = [
+        { type: 'info', text: '🌐 Fetching global conference pipelines (Dubai, SA, Nigeria, Aus, Egypt)...' },
+        { type: 'info', text: '📊 Scaling registration pipeline for 10,000+ attendee peak traffic...' },
+        { type: 'success', text: '🛡️ Server load balanced: Zero-downtime high-volume ticketing live.' }
+      ];
+    } else if (lowerCmd.includes('skills') || lowerCmd.includes('stack')) {
+      responses = [
+        { type: 'success', text: '💻 CORE STACK: React.js, Node.js, Python, PHP, AI/LLM Integration, WordPress, Tailwind CSS.' }
+      ];
+    } else if (lowerCmd.includes('help')) {
+      responses = [
+        { type: 'info', text: 'Available commands: "aura os", "opd sync", "event pipeline", "stack", "contact"' }
+      ];
+    } else if (lowerCmd.includes('contact') || lowerCmd.includes('hire')) {
+      responses = [
+        { type: 'success', text: '📩 Direct Contact: neeragurjarsood@gmail.com | Phone: +91-7988892528' }
+      ];
+    } else {
+      responses = [
+        { type: 'info', text: `Executing custom script: "${commandText}"` },
+        { type: 'info', text: 'Analyzing query via Nainpal AI Pipeline...' },
+        { type: 'success', text: 'Task completed successfully with zero error rate.' }
+      ];
+    }
+
+    let delay = 300;
+    responses.forEach((res, index) => {
+      setTimeout(() => {
+        setTerminalLogs(prev => [...prev, res]);
+        if (index === responses.length - 1) {
+          setIsExecuting(false);
+        }
+      }, delay);
+      delay += 500;
+    });
+
+    setTerminalInput('');
+  };
+
+  const projects = [
+    {
+      title: "AURA AI - AI Website OS",
+      category: "ai",
+      tag: "AI / Full Stack",
+      subtitle: "Autonomous Virtual Employee Operating System",
+      description: "An AI-powered Website Operating System that acts as an intelligent virtual employee. Features multilingual conversations, role-based workflows for visitors/owners, and dynamic automated lead conversion.",
+      tech: ["React.js", "Node.js", "LLM APIs", "PostgreSQL", "REST APIs", "Tailwind"],
+      link: "https://github.com",
+      highlight: "In Active Development",
+      metrics: "Multilingual AI Agent",
+      featured: true
+    },
+    {
+      title: "Doctors OPD LED Panel System",
+      category: "healthcare",
+      tag: "Real-time System",
+      subtitle: "Centralized Hospital Display Automation",
+      description: "A large-scale display system for hospital LED screens showing real-time doctor availability with live sheet data synchronization and instant auto-refresh across hospital floors.",
+      tech: ["JavaScript", "PHP", "Real-Time Sync", "Hospital System API", "HTML5/CSS3"],
+      link: "https://todaysopd.ayushmanhhs.in/",
+      highlight: "Deployed at Ayushman Hospital",
+      metrics: "Live Multi-Screen Sync",
+      featured: true
+    },
+    {
+      title: "Etex Ethiopia Event Platform",
+      category: "international",
+      tag: "Global Conference",
+      subtitle: "International Trade & Exhibition Portal",
+      description: "Delivered a large-scale international event website with structured dynamic agendas, global speaker highlights, multi-partner showcases, and seamless attendee onboarding.",
+      tech: ["WordPress", "Elementor", "Custom PHP", "MySQL", "Server Optimization"],
+      link: "https://etexethiopia.com/",
+      highlight: "International Scale",
+      metrics: "10,000+ Visitors",
+      featured: true
+    },
+    {
+      title: "Clim Africa Multilingual Platform",
+      category: "international",
+      tag: "Dark Theme Event",
+      subtitle: "Climate & Energy Summit Portal",
+      description: "A modern dark-themed international event platform supporting multilingual capabilities, dynamic content workflows, and global speaker and partner scheduling.",
+      tech: ["WordPress", "Multilingual i18n", "UI/UX Design", "PHP", "Performance Tuning"],
+      link: "https://climafrica.com/",
+      highlight: "Multilingual Support",
+      metrics: "Global Audience",
+      featured: false
+    },
+    {
+      title: "Ayushman HHS Healthcare",
+      category: "healthcare",
+      tag: "Hospital Ecosystem",
+      subtitle: "Comprehensive Medical & OPD Portal",
+      description: "Managed complete hospital and branch web platforms. Implemented patient appointment flows, live Google Review integration, and responsive department showcases.",
+      tech: ["PHP", "JavaScript", "SEO", "Google Reviews API", "UI Optimization"],
+      link: "https://www.ayushmanhhs.in/",
+      highlight: "Live Production Site",
+      metrics: "100+ Daily Leads",
+      featured: false
+    },
+    {
+      title: "Luminoussgreens Energy",
+      category: "corporate",
+      tag: "Green Tech",
+      subtitle: "Corporate Solar Solutions Platform",
+      description: "Responsive corporate portal built for high lead generation, service showcase, mobile-first responsiveness, and optimized conversion funnels.",
+      tech: ["WordPress", "Custom JS", "HTML5/CSS3", "Lead Automation"],
+      link: "https://luminoussgreens.com/",
+      highlight: "High Conversion UI",
+      metrics: "Optimized Speed score 95+",
+      featured: false
+    },
+    {
+      title: "Braevo Full Stack E-Commerce",
+      category: "ecommerce",
+      tag: "MERN Stack",
+      subtitle: "End-to-End Online Shopping Application",
+      description: "Full-stack e-commerce app built with authentication, product catalog management, order tracking, and integrated seamless payment gateways.",
+      tech: ["MongoDB", "Express.js", "React.js", "Node.js", "Payment Gateway"],
+      link: "#",
+      highlight: "Custom MERN Architecture",
+      metrics: "Full Payment Pipeline",
+      featured: false
+    },
+    {
+      title: "Kapiva Ayurvedic Experience",
+      category: "ecommerce",
+      tag: "E-Commerce Optimization",
+      subtitle: "High-Growth Direct-to-Consumer Portal",
+      description: "Optimized UI layouts, improved site navigation, and product visibility, contributing directly to boosted online user engagement and checkout conversion.",
+      tech: ["UI/UX Optimization", "Frontend Tuning", "Conversion Rate Optimization"],
+      link: "https://kapiva.in/",
+      highlight: "E-Commerce Growth",
+      metrics: "Enhanced Checkout Rate",
+      featured: false
+    }
+  ];
+
+  const filteredProjects = activeTab === 'all' 
+    ? projects 
+    : projects.filter(p => p.category === activeTab);
+
+  const skillsData = [
+    {
+      category: "AI & Automation",
+      icon: <Sparkles className="w-5 h-5 text-emerald-400" />,
+      skills: ["AI/LLM Integration", "AI OS Architecture", "AI Workflow Automation", "Multilingual NLU", "Prompt Engineering"]
+    },
+    {
+      category: "Frontend Development",
+      icon: <Code className="w-5 h-5 text-cyan-400" />,
+      skills: ["React.js", "JavaScript (ES6+)", "Tailwind CSS", "Bootstrap", "HTML5 / CSS3", "jQuery", "Responsive UI"]
+    },
+    {
+      category: "Backend & Systems",
+      icon: <Server className="w-5 h-5 text-purple-400" />,
+      skills: ["Node.js", "Express.js", "PHP", "Python (Django)", "Laravel (Basic)", "REST APIs"]
+    },
+    {
+      category: "CMS & Page Builders",
+      icon: <Layers className="w-5 h-5 text-amber-400" />,
+      skills: ["WordPress", "Elementor Pro", "WPBakery", "WooCommerce Customization", "CMS Security"]
+    },
+    {
+      category: "Databases & Cloud",
+      icon: <Database className="w-5 h-5 text-blue-400" />,
+      skills: ["MySQL", "MongoDB", "PostgreSQL", "cPanel Management", "Hostinger / Bluehost / SiteGround"]
+    },
+    {
+      category: "Core & Design",
+      icon: <ShieldCheck className="w-5 h-5 text-rose-400" />,
+      skills: ["Data Structures & Algo", "Photoshop", "Canva", "Server Deployments", "SEO Optimization"]
+    }
+  ];
+
+  return (
+    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-emerald-500 selection:text-black relative overflow-x-hidden">
+      
+      {/* Background Ambient Glows */}
+      <div className="fixed top-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none -z-10 animate-pulse"></div>
+      <div className="fixed bottom-0 right-1/4 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[150px] pointer-events-none -z-10"></div>
+      <div className="fixed top-1/2 right-10 w-80 h-80 bg-purple-500/5 rounded-full blur-[100px] pointer-events-none -z-10"></div>
+
+      {/* Grid Pattern Overlay */}
+      <div className="fixed inset-0 bg-[linear-gradient(to_right,#1e293b15_1px,transparent_1px),linear-gradient(to_bottom,#1e293b15_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none -z-10"></div>
+
+      {/* Navigation Header */}
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-slate-950/80 backdrop-blur-md border-b border-slate-800/80 py-3' : 'bg-transparent py-5'}`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+          <a href="#" className="flex items-center gap-2 group">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-cyan-500 p-[1px] flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
+              <div className="w-full h-full bg-slate-950 rounded-[11px] flex items-center justify-center font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
+                NP
+              </div>
+            </div>
+            <div>
+              <span className="font-bold text-lg tracking-wider text-slate-100 group-hover:text-emerald-400 transition-colors">NAINPAL</span>
+              <span className="block text-[10px] text-emerald-400/80 tracking-widest font-mono uppercase">AI & Full Stack</span>
+            </div>
+          </a>
+
+          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
+            <a href="#about" className="hover:text-emerald-400 transition-colors">About</a>
+            <a href="#aura-simulator" className="hover:text-emerald-400 transition-colors flex items-center gap-1">
+              <Sparkles className="w-3.5 h-3.5 text-emerald-400" /> AURA AI OS
+            </a>
+            <a href="#skills" className="hover:text-emerald-400 transition-colors">Skills</a>
+            <a href="#experience" className="hover:text-emerald-400 transition-colors">Experience</a>
+            <a href="#projects" className="hover:text-emerald-400 transition-colors">Projects</a>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={() => setContactModal(true)}
+              className="px-4 py-2 text-xs font-semibold rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 hover:border-emerald-500/60 transition-all flex items-center gap-2 shadow-sm"
+            >
+              <Send className="w-3.5 h-3.5" />
+              <span>Hire Me</span>
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <section className="pt-32 pb-20 md:pt-40 md:pb-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          <div className="lg:col-span-7 space-y-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/90 border border-emerald-500/30 text-emerald-400 text-xs font-mono">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+              <span>Full Stack Developer & AI Automation Specialist</span>
+            </div>
+
+            <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight leading-tight">
+              Building Next-Gen <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500">
+                AI Workflows & Scalable
+              </span> Web Systems
+            </h1>
+
+            <p className="text-slate-400 text-base sm:text-lg max-w-2xl leading-relaxed">
+              Based in New Delhi. Specialist in creating intelligent, high-performance web applications, automated workflow systems, and international event platforms across Dubai, South Africa, Australia, and India.
+            </p>
+
+            <div className="pt-2 flex flex-wrap items-center gap-4">
+              <button 
+                onClick={() => setContactModal(true)}
+                className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 font-bold text-sm shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2"
+              >
+                <span>Get In Touch</span>
+                <ChevronRight className="w-4 h-4" />
+              </button>
+
+              <a 
+                href="#projects"
+                className="px-6 py-3.5 rounded-xl bg-slate-900/80 border border-slate-800 text-slate-200 hover:text-white hover:border-slate-700 font-semibold text-sm transition-all flex items-center gap-2 hover:bg-slate-800/50"
+              >
+                <span>Explore Live Projects</span>
+                <ExternalLink className="w-4 h-4 text-slate-400" />
+              </a>
+            </div>
+
+            {/* Quick Specs Cards */}
+            <div className="pt-8 grid grid-cols-3 gap-4 border-t border-slate-800/80">
+              <div className="space-y-1">
+                <div className="text-2xl font-black text-slate-100 font-mono">3+ Years</div>
+                <div className="text-xs text-slate-400">Industry Experience</div>
+              </div>
+              <div className="space-y-1">
+                <div className="text-2xl font-black text-emerald-400 font-mono">6+ Countries</div>
+                <div className="text-xs text-slate-400">Global Event Deployments</div>
+              </div>
+              <div className="space-y-1">
+                <div className="text-2xl font-black text-cyan-400 font-mono">20+ Web Ops</div>
+                <div className="text-xs text-slate-400">Live Apps & Platforms</div>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Interactive Code/Profile Card Visual */}
+          <div className="lg:col-span-5">
+            <div className="relative rounded-2xl bg-gradient-to-b from-slate-900/90 to-slate-950/90 border border-slate-800 p-6 shadow-2xl backdrop-blur-xl group hover:border-emerald-500/40 transition-all duration-500">
+              
+              <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-800">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
+                  <div className="w-3 h-3 rounded-full bg-amber-500/80"></div>
+                  <div className="w-3 h-3 rounded-full bg-emerald-500/80"></div>
+                  <span className="ml-2 font-mono text-xs text-slate-400">nainpal.config.ts</span>
+                </div>
+                <div className="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                  SYSTEM ACTIVE
+                </div>
+              </div>
+
+              <div className="font-mono text-xs space-y-3 leading-relaxed">
+                <div>
+                  <span className="text-purple-400">const</span> <span className="text-blue-400">developer</span> = &#123;
+                </div>
+                <div className="pl-4">
+                  <span className="text-slate-400">name:</span> <span className="text-emerald-300">'NAINPAL'</span>,
+                </div>
+                <div className="pl-4">
+                  <span className="text-slate-400">role:</span> <span className="text-emerald-300">'Full Stack & AI Engineer'</span>,
+                </div>
+                <div className="pl-4">
+                  <span className="text-slate-400">location:</span> <span className="text-emerald-300">'Dwarka Sec 15, New Delhi'</span>,
+                </div>
+                <div className="pl-4">
+                  <span className="text-slate-400">coreCapabilities:</span> [
+                  <div className="pl-4 text-cyan-300">
+                    'AI Workflow Automation',<br/>
+                    'OPD LED Screen Systems',<br/>
+                    'MERN & PHP Architecture',<br/>
+                    'Global Event Platform Lead'
+                  </div>
+                  ]
+                </div>
+                <div>&#125;;</div>
+
+                <div className="pt-2 text-slate-500">
+                  // Contact quick ping
+                </div>
+                <div>
+                  <span className="text-purple-400">export default</span> <span className="text-yellow-400">neeragurjarsood@gmail.com</span>;
+                </div>
+              </div>
+
+              {/* Glowing Badge */}
+              <div className="mt-6 p-3 rounded-xl bg-slate-900/80 border border-emerald-500/20 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+                    <Activity className="w-4 h-4 animate-spin" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-semibold text-slate-200">Current Role</div>
+                    <div className="text-[11px] text-slate-400">Ayushman Hospital • Web Dev</div>
+                  </div>
+                </div>
+                <span className="text-[10px] text-emerald-400 font-mono bg-emerald-500/10 px-2 py-1 rounded">2025 - Present</span>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* AURA AI OS Simulator Section */}
+      <section id="aura-simulator" className="py-16 bg-slate-900/50 border-y border-slate-800/80 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono">
+              <Terminal className="w-3.5 h-3.5" />
+              <span>INTERACTIVE WORKFLOW ENGINE</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+              AURA AI OS <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Live Simulator</span>
+            </h2>
+            <p className="text-slate-400 text-sm sm:text-base">
+              Test Nainpal's automated AI agent concept and hospital backend integration engine right inside this interactive terminal.
+            </p>
+          </div>
+
+          <div className="max-w-4xl mx-auto rounded-2xl bg-slate-950 border border-slate-800 shadow-2xl overflow-hidden">
+            {/* Terminal Top Bar */}
+            <div className="bg-slate-900/90 px-4 py-3 border-b border-slate-800 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="w-3 h-3 rounded-full bg-rose-500"></span>
+                <span className="w-3 h-3 rounded-full bg-amber-500"></span>
+                <span className="w-3 h-3 rounded-full bg-emerald-500"></span>
+                <span className="text-xs font-mono text-slate-400 ml-2">aura-ai-automation@nainpal-node:~</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded">
+                  ONLINE
+                </span>
+              </div>
+            </div>
+
+            {/* Terminal Body */}
+            <div className="p-4 sm:p-6 font-mono text-xs sm:text-sm h-80 overflow-y-auto space-y-2 text-slate-300">
+              {terminalLogs.map((log, idx) => (
+                <div key={idx} className="flex items-start gap-2">
+                  {log.type === 'user' && <span className="text-emerald-400 font-bold">&gt;</span>}
+                  {log.type === 'system' && <span className="text-cyan-400">[SYSTEM]</span>}
+                  {log.type === 'info' && <span className="text-amber-400">[PROCESS]</span>}
+                  {log.type === 'success' && <span className="text-emerald-400">[OK]</span>}
+                  {log.type === 'prompt' && <span className="text-slate-500">#</span>}
+                  <span className={`${
+                    log.type === 'user' ? 'text-white font-semibold' :
+                    log.type === 'success' ? 'text-emerald-300' :
+                    log.type === 'info' ? 'text-amber-200' :
+                    'text-slate-400'
+                  }`}>
+                    {log.text}
+                  </span>
+                </div>
+              ))}
+              <div ref={terminalEndRef} />
+            </div>
+
+            {/* Terminal Command Shortcuts */}
+            <div className="px-4 py-3 bg-slate-900/60 border-t border-slate-800/80 flex flex-wrap gap-2 items-center">
+              <span className="text-[11px] font-mono text-slate-400 mr-2">Quick Commands:</span>
+              <button 
+                onClick={() => runAutomation('run aura os')} 
+                className="px-2.5 py-1 text-xs font-mono rounded bg-slate-800 text-emerald-400 hover:bg-emerald-500/20 hover:border-emerald-500/50 border border-slate-700 transition-colors"
+              >
+                aura os
+              </button>
+              <button 
+                onClick={() => runAutomation('sync opd screens')} 
+                className="px-2.5 py-1 text-xs font-mono rounded bg-slate-800 text-cyan-400 hover:bg-cyan-500/20 hover:border-cyan-500/50 border border-slate-700 transition-colors"
+              >
+                sync opd screens
+              </button>
+              <button 
+                onClick={() => runAutomation('event pipeline Dubai')} 
+                className="px-2.5 py-1 text-xs font-mono rounded bg-slate-800 text-purple-400 hover:bg-purple-500/20 hover:border-purple-500/50 border border-slate-700 transition-colors"
+              >
+                event pipeline
+              </button>
+              <button 
+                onClick={() => runAutomation('show full stack')} 
+                className="px-2.5 py-1 text-xs font-mono rounded bg-slate-800 text-amber-400 hover:bg-amber-500/20 hover:border-amber-500/50 border border-slate-700 transition-colors"
+              >
+                show full stack
+              </button>
+            </div>
+
+            {/* Terminal Input */}
+            <form 
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (terminalInput.trim()) runAutomation(terminalInput);
+              }} 
+              className="p-3 bg-slate-950 border-t border-slate-800 flex items-center gap-2"
+            >
+              <span className="text-emerald-400 font-mono font-bold pl-2">&gt;</span>
+              <input 
+                type="text"
+                value={terminalInput}
+                onChange={(e) => setTerminalInput(e.target.value)}
+                placeholder="Type command here (e.g. 'help', 'contact', 'aura os')..."
+                className="w-full bg-transparent text-slate-100 font-mono text-xs focus:outline-none placeholder-slate-600"
+              />
+              <button 
+                type="submit" 
+                disabled={isExecuting}
+                className="px-3 py-1.5 rounded-md bg-emerald-500 text-slate-950 font-mono text-xs font-bold hover:bg-emerald-400 transition-colors flex items-center gap-1 disabled:opacity-50"
+              >
+                <Play className="w-3 h-3" />
+                <span>EXEC</span>
+              </button>
+            </form>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* Experience & Career Timeline */}
+      <section id="experience" className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono mb-3">
+              <Briefcase className="w-3.5 h-3.5" />
+              <span>CAREER HISTORY</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+              Professional <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Experience</span>
+            </h2>
+          </div>
+          <p className="text-slate-400 text-sm max-w-md mt-2 md:mt-0">
+            Track record across healthcare systems, high-traffic international conference events, and fintech IPO platforms.
+          </p>
+        </div>
+
+        <div className="space-y-8 relative before:absolute before:inset-0 before:left-4 sm:before:left-1/2 before:w-0.5 before:bg-slate-800">
+          
+          {/* Experience Item 1 */}
+          <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between group">
+            <div className="sm:w-1/2 sm:pr-12 mb-4 sm:mb-0 sm:text-right order-1">
+              <div className="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-emerald-500/40 transition-all backdrop-blur-sm">
+                <span className="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20 inline-block mb-2">
+                  Oct 2025 - Present
+                </span>
+                <h3 className="text-xl font-bold text-slate-100">Web Developer</h3>
+                <h4 className="text-sm font-medium text-cyan-400 mb-3">Ayushman Hospital</h4>
+                <ul className="text-xs text-slate-300 space-y-2 list-disc list-inside sm:list-none">
+                  <li>Developed centralized Doctors OPD LED Panel System for real-time display & instant auto-refresh.</li>
+                  <li>Independently handle all hospital & branch websites, domain, hosting, and server deployments.</li>
+                  <li>Built patient appointment flows, landing pages, and patient-focused UI.</li>
+                </ul>
+              </div>
+            </div>
+            <div className="absolute left-4 sm:left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-slate-950 border-2 border-emerald-500 flex items-center justify-center text-emerald-400 z-10 shadow-lg shadow-emerald-500/20">
+              <Activity className="w-4 h-4" />
+            </div>
+            <div className="sm:w-1/2 sm:pl-12 order-2 hidden sm:block"></div>
+          </div>
+
+          {/* Experience Item 2 */}
+          <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between group">
+            <div className="sm:w-1/2 sm:pr-12 order-2 hidden sm:block"></div>
+            <div className="absolute left-4 sm:left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-slate-950 border-2 border-cyan-500 flex items-center justify-center text-cyan-400 z-10 shadow-lg shadow-cyan-500/20">
+              <Globe className="w-4 h-4" />
+            </div>
+            <div className="sm:w-1/2 sm:pl-12 mb-4 sm:mb-0 order-1 sm:order-2">
+              <div className="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-cyan-500/40 transition-all backdrop-blur-sm">
+                <span className="text-xs font-mono text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded-full border border-cyan-500/20 inline-block mb-2">
+                  Nov 2023 - Sep 2025
+                </span>
+                <h3 className="text-xl font-bold text-slate-100">Web Developer (Team Leader)</h3>
+                <h4 className="text-sm font-medium text-emerald-400 mb-3">QNA MARCOM</h4>
+                <ul className="text-xs text-slate-300 space-y-2 list-disc">
+                  <li>Managed platforms for international events across Dubai (UAE), South Africa, Nigeria, Australia, Egypt & India.</li>
+                  <li>Handled high-volume user registrations (thousands of entries) with complex form integrations.</li>
+                  <li>Ensured website security, server performance, and worked with marketing on high-conversion landing pages.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* Experience Item 3 */}
+          <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between group">
+            <div className="sm:w-1/2 sm:pr-12 mb-4 sm:mb-0 sm:text-right order-1">
+              <div className="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-purple-500/40 transition-all backdrop-blur-sm">
+                <span className="text-xs font-mono text-purple-400 bg-purple-500/10 px-2.5 py-1 rounded-full border border-purple-500/20 inline-block mb-2">
+                  May 2022 - Oct 2023
+                </span>
+                <h3 className="text-xl font-bold text-slate-100">Web Developer / Intern</h3>
+                <h4 className="text-sm font-medium text-purple-400 mb-3">India IPO</h4>
+                <ul className="text-xs text-slate-300 space-y-2 list-disc list-inside sm:list-none">
+                  <li>Worked on IPO-focused digital platforms for upcoming public market offerings.</li>
+                  <li>Developed responsive layouts for investor user experience and live campaign requirements.</li>
+                  <li>Promoted from 6-month intern to full-time Web Developer based on outstanding performance.</li>
+                </ul>
+              </div>
+            </div>
+            <div className="absolute left-4 sm:left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-slate-950 border-2 border-purple-500 flex items-center justify-center text-purple-400 z-10 shadow-lg shadow-purple-500/20">
+              <Award className="w-4 h-4" />
+            </div>
+            <div className="sm:w-1/2 sm:pl-12 order-2 hidden sm:block"></div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* Skills Matrix */}
+      <section id="skills" className="py-20 bg-slate-900/40 border-y border-slate-800/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono">
+              <Cpu className="w-3.5 h-3.5" />
+              <span>TECHNICAL CAPABILITIES</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+              Full Stack & <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">AI Stack</span>
+            </h2>
+            <p className="text-slate-400 text-sm sm:text-base">
+              A comprehensive toolkit spanning modern frontend frameworks, backend servers, AI automation pipelines, and server hosting infrastructure.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {skillsData.map((cat, idx) => (
+              <div 
+                key={idx} 
+                className="p-6 rounded-2xl bg-slate-950/80 border border-slate-800/80 hover:border-emerald-500/30 transition-all duration-300 group hover:-translate-y-1 shadow-lg"
+              >
+                <div className="flex items-center gap-3 mb-4 pb-3 border-b border-slate-800/80">
+                  <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 group-hover:border-emerald-500/40 transition-colors">
+                    {cat.icon}
+                  </div>
+                  <h3 className="font-bold text-slate-200 text-base">{cat.category}</h3>
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  {cat.skills.map((skill, sIdx) => (
+                    <span 
+                      key={sIdx}
+                      className="px-3 py-1 rounded-lg bg-slate-900 border border-slate-800 text-xs text-slate-300 hover:border-emerald-500/40 hover:text-emerald-300 transition-all font-mono"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </section>
+
+      {/* Projects Showcase */}
+      <section id="projects" className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono mb-3">
+              <Layers className="w-3.5 h-3.5" />
+              <span>PORTFOLIO SHOWCASE</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+              Featured <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Projects & Systems</span>
+            </h2>
+          </div>
+
+          {/* Project Filters */}
+          <div className="flex flex-wrap gap-2 mt-4 md:mt-0">
+            {['all', 'ai', 'healthcare', 'international', 'ecommerce'].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-mono capitalize transition-all ${
+                  activeTab === tab 
+                    ? 'bg-emerald-500 text-slate-950 font-bold shadow-md shadow-emerald-500/20' 
+                    : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Projects Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredProjects.map((project, idx) => (
+            <div 
+              key={idx}
+              className="rounded-2xl bg-slate-900/70 border border-slate-800 hover:border-emerald-500/40 transition-all duration-300 flex flex-col justify-between p-6 group hover:-translate-y-1 shadow-xl backdrop-blur-sm relative overflow-hidden"
+            >
+              {/* Top Neon Accent */}
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500/0 via-emerald-500/50 to-cyan-500/0 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20">
+                    {project.tag}
+                  </span>
+                  {project.highlight && (
+                    <span className="text-[10px] font-mono text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded">
+                      {project.highlight}
+                    </span>
+                  )}
+                </div>
+
+                <h3 className="text-xl font-bold text-slate-100 group-hover:text-emerald-400 transition-colors">
+                  {project.title}
+                </h3>
+                <p className="text-xs text-slate-400 font-medium mb-3">{project.subtitle}</p>
+
+                <p className="text-slate-300 text-xs leading-relaxed mb-6">
+                  {project.description}
+                </p>
+              </div>
+
+              <div>
+                <div className="flex flex-wrap gap-1.5 mb-6">
+                  {project.tech.map((t, tIdx) => (
+                    <span key={tIdx} className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-950 text-slate-400 border border-slate-800">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between">
+                  <span className="text-xs font-mono text-slate-400">{project.metrics}</span>
+                  {project.link !== '#' ? (
+                    <a 
+                      href={project.link} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="p-2 rounded-lg bg-slate-800 hover:bg-emerald-500 hover:text-slate-950 text-slate-200 transition-all flex items-center gap-1 text-xs font-semibold"
+                    >
+                      <span>Visit</span>
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                    </a>
+                  ) : (
+                    <span className="text-xs text-slate-500 font-mono">Custom Stack App</span>
+                  )}
+                </div>
+              </div>
+
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Education & Global Reach Banner */}
+      <section className="py-16 bg-slate-900/60 border-y border-slate-800/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            
+            {/* Education Box */}
+            <div className="p-8 rounded-2xl bg-slate-950 border border-slate-800 space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="p-3 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  <GraduationCap className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-slate-100">B.Tech - Computer Science Engineering</h3>
+                  <p className="text-xs text-slate-400">Panipat Institute of Engineering & Technology (KUK) • 2020 - 2024</p>
+                </div>
+              </div>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                Strong academic foundation in Data Structures, Algorithms, Core Computer Science, Object-Oriented Software Design, and Full Stack Engineering. Certified in Full Stack Development from DUCAT, Delhi.
+              </p>
+            </div>
+
+            {/* Global Reach Highlight */}
+            <div className="p-8 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="p-3 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                  <Globe className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-slate-100">International Event Scale</h3>
+                  <p className="text-xs text-slate-400">Dubai (UAE) • South Africa • Nigeria • Australia • Egypt • India</p>
+                </div>
+              </div>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                Proven capability in deploying event management & high-throughput registration portals built to withstand heavy traffic spikes during international tech & trade expos.
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* Call To Action / Footer */}
+      <footer className="py-20 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
+          
+          <div className="max-w-2xl mx-auto space-y-4">
+            <h2 className="text-3xl sm:text-5xl font-black tracking-tight">
+              Ready To Build Next-Level <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500">
+                AI & Web Infrastructure?
+              </span>
+            </h2>
+            <p className="text-slate-400 text-sm sm:text-base">
+              Available for full stack engineering, AI system integration, custom hospital/corporate web architecture, and full-scale web development roles.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap justify-center items-center gap-4 pt-4">
+            <button 
+              onClick={() => setContactModal(true)}
+              className="px-8 py-4 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 font-bold text-sm shadow-xl shadow-emerald-500/20 hover:scale-105 transition-all flex items-center gap-2"
+            >
+              <Mail className="w-4 h-4" />
+              <span>Contact Nainpal Now</span>
+            </button>
+
+            <a 
+              href="mailto:neeragurjarsood@gmail.com"
+              className="px-6 py-4 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 hover:border-slate-700 text-sm font-semibold transition-all flex items-center gap-2"
+            >
+              <Phone className="w-4 h-4 text-emerald-400" />
+              <span>+91-7988892528</span>
+            </a>
+          </div>
+
+          <div className="pt-16 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+            <div>
+              © 2026 NAINPAL. All rights reserved. Dwarka Sector 15, New Delhi.
+            </div>
+            <div className="flex items-center gap-4">
+              <span>neeragurjarsood@gmail.com</span>
+              <span>•</span>
+              <span>+91-7988892528</span>
+            </div>
+          </div>
+
+        </div>
+      </footer>
+
+      {/* Hire / Contact Drawer Modal */}
+      {contactModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+          <div className="relative w-full max-w-lg rounded-2xl bg-slate-900 border border-slate-800 p-6 sm:p-8 shadow-2xl space-y-6">
+            
+            <button 
+              onClick={() => { setContactModal(false); setFormSubmitted(false); }}
+              className="absolute top-4 right-4 p-2 rounded-lg bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono mb-2">
+                <Send className="w-3 h-3" />
+                <span>DIRECT REACHOUT</span>
+              </div>
+              <h3 className="text-2xl font-bold text-slate-100">Get In Touch With Nainpal</h3>
+              <p className="text-xs text-slate-400 mt-1">
+                Full Stack Developer & AI Expert based in Dwarka Sec 15, New Delhi.
+              </p>
+            </div>
+
+            {formSubmitted ? (
+              <div className="p-6 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-center space-y-3">
+                <div className="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto">
+                  <Check className="w-6 h-6" />
+                </div>
+                <h4 className="font-bold text-slate-100">Message Dispatched!</h4>
+                <p className="text-xs text-slate-300">
+                  Thank you for reaching out. Nainpal will get back to you shortly at your email.
+                </p>
+              </div>
+            ) : (
+              <form 
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  setFormSubmitted(true);
+                }} 
+                className="space-y-4 text-xs"
+              >
+                <div className="space-y-1">
+                  <label className="text-slate-300 font-mono">Your Name / Organization</label>
+                  <input 
+                    required 
+                    type="text" 
+                    placeholder="e.g. Ayushman Tech Team / Recruiter" 
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-slate-950 border border-slate-800 text-slate-100 focus:outline-none focus:border-emerald-500"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-slate-300 font-mono">Email Address</label>
+                  <input 
+                    required 
+                    type="email" 
+                    placeholder="name@company.com" 
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-slate-950 border border-slate-800 text-slate-100 focus:outline-none focus:border-emerald-500"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-slate-300 font-mono">Project Scope / Offer Details</label>
+                  <textarea 
+                    rows={4}
+                    required 
+                    placeholder="Brief details about your project or job opportunity..." 
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-slate-950 border border-slate-800 text-slate-100 focus:outline-none focus:border-emerald-500"
+                  ></textarea>
+                </div>
+
+                <button 
+                  type="submit"
+                  className="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 font-bold text-sm shadow-lg shadow-emerald-500/20 hover:scale-[1.01] transition-all flex items-center justify-center gap-2"
+                >
+                  <Send className="w-4 h-4" />
+                  <span>Send Direct Message</span>
+                </button>
+
+                <div className="pt-2 text-center text-[11px] text-slate-500">
+                  Or email directly: <a href="mailto:neeragurjarsood@gmail.com" className="text-emerald-400 underline">neeragurjarsood@gmail.com</a>
+                </div>
+              </form>
+            )}
+
+          </div>
+        </div>
+      )}
+
+    </div>
+  );
+}
