@@ -4787,6 +4787,26 @@
       box.addEventListener('pointerenter', () => {box.classList.add('pz'); clearTimeout(tm)}); box.addEventListener('pointerleave', () => {box.classList.remove('pz'); go(cur)}); go(0)
     }
   </script>
+
+  <script>
+document.addEventListener("keydown", function (e) {
+
+    if (
+        e.ctrlKey && e.key.toLowerCase() === "u" ||
+        e.key === "F12" ||
+        (e.ctrlKey && e.shiftKey &&
+        ["I", "J", "C"].includes(e.key.toUpperCase()))
+    ) {
+        e.preventDefault();
+        return false;
+    }
+
+});
+
+document.addEventListener("contextmenu", function (e) {
+    e.preventDefault();
+});
+</script>
 </body>
 
 </html>
